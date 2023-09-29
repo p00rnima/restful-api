@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "default": {},
+  "title": "Root Schema",
+  "required": [
+    "id",
+    "name",
+    "data"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "default": "",
+      "title": "The id Schema",
+      "examples": [
+        "7"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "default": "",
+      "title": "The name Schema",
+      "examples": [
+        "Apple MacBook Pro 16"
+      ]
+    },
+    "data": {
+      "type": "object",
+      "default": {},
+      "title": "The data Schema",
+      "required": [
+        "year",
+        "price",
+        "CPU model",
+        "Hard disk size"
+      ],
+      "properties": {
+        "year": {
+          "type": "integer",
+          "default": 0,
+          "title": "The year Schema",
+          "examples": [
+            2019
+          ]
+        },
+        "price": {
+          "type": "number",
+          "default": 0.0,
+          "title": "The price Schema",
+          "examples": [
+            1849.99
+          ]
+        },
+        "CPU model": {
+          "type": "string",
+          "default": "",
+          "title": "The CPU model Schema",
+          "examples": [
+            "Intel Core i9"
+          ]
+        },
+        "Hard disk size": {
+          "type": "string",
+          "default": "",
+          "title": "The Hard disk size Schema",
+          "examples": [
+            "1 TB"
+          ]
+        }
+      },
+      "examples": [{
+        "year": 2019,
+        "price": 1849.99,
+        "CPU model": "Intel Core i9",
+        "Hard disk size": "1 TB"
+      }]
+    }
+  },
+  "examples": [{
+    "id": "7",
+    "name": "Apple MacBook Pro 16",
+    "data": {
+      "year": 2019,
+      "price": 1849.99,
+      "CPU model": "Intel Core i9",
+      "Hard disk size": "1 TB"
+    }
+  }]
+}

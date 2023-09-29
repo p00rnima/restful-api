@@ -1,0 +1,172 @@
+buildscript {
+    ext {
+        dependencyManagementPluginVersion = '1.0.3.RELEASE'
+        js2pPluginVersion = '1.0.2'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://jcenter.bintray.com"
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven { url "https://projectlombok.org/edge-releases" }
+
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.22.1")
+        classpath("io.spring.gradle:dependency-management-plugin:${dependencyManagementPluginVersion}")
+        classpath "org.jsonschema2pojo:jsonschema2pojo-gradle-plugin:${js2pPluginVersion}"
+        classpath "net.masterthought:cucumber-reporting:3.18.0"
+        classpath group: 'org.jdbi', name: 'jdbi3-postgres', version: '3.0.0-alpha0'
+        classpath "org.projectlombok:lombok:edge-SNAPSHOT"
+        classpath "gradle.plugin.com.energizedwork.webdriver-binaries:webdriver-binaries-gradle-plugin:1.2"
+
+    }
+
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jsonschema2pojo'
+
+// Dependency versions
+ext.logbackVersion = '1.2.3'
+ext.slf4jVersion = '1.7.25'
+ext.junitVersion = '4.12'
+ext.jacksonVersion = '2.8.8'
+ext.apacheCommondLangVersion = '3.5'
+ext.requestBuilderVersion = '0.0.1'
+ext.cucumberVersion = '1.2.5'
+ext.assertjVersion = '3.14.0'
+ext.testngVersion = '6.11'
+ext.okHttpLoggingVersion = '1.0.1'
+ext.cucumberVersion = '2.4.0'
+ext.unitilsVersion = '3.4.6'
+
+dependencyManagement {
+    dependencies {
+        // External dependencies
+        dependency group: 'ch.qos.logback', name: 'logback-classic', version: "${logbackVersion}"
+        dependency group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
+        dependency group: 'org.testng', name: 'testng', version: "${testngVersion}"
+        dependency group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${jacksonVersion}"
+        dependency group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${jacksonVersion}"
+        dependency group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jacksonVersion}"
+        dependency group: 'org.apache.commons', name: 'commons-lang3', version: "${apacheCommondLangVersion}"
+        dependency group: 'org.assertj', name: 'assertj-core', version: "${assertjVersion}"
+        dependency group: 'com.jleth.util', name: 'okhttp2-logging', version: "${okHttpLoggingVersion}"
+        dependency group: 'com.google.guava', name: 'guava', version: '23.0'
+        dependency group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+        dependency group: 'org.modelmapper', name: 'modelmapper', version: '1.1.0'
+        dependency group: 'com.healthmarketscience.sqlbuilder', name: 'sqlbuilder', version: '2.1.7'
+        dependency group: 'io.cucumber', name: 'cucumber-core', version: "${cucumberVersion}"
+        dependency group: 'io.cucumber', name: 'cucumber-java', version: "${cucumberVersion}"
+        dependency group: 'io.cucumber', name: 'cucumber-testng', version: "${cucumberVersion}"
+        dependency group: 'org.projectlombok', name: 'lombok', version: '1.18.14'
+        dependency group: 'org.unitils', name: 'unitils-core', version: "${unitilsVersion}"
+    }
+}
+
+dependencies {
+
+    compile group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5'
+    compile group: 'com.jleth.util', name: 'okhttp2-logging'
+    compile group: 'ch.qos.logback', name: 'logback-classic'
+    compile group: 'org.slf4j', name: 'slf4j-api'
+    compile group: 'org.assertj', name: 'assertj-core'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
+    compile group: 'org.apache.commons', name: 'commons-lang3'
+    compile group: 'com.google.guava', name: 'guava'
+    compile group: 'com.google.guava', name: 'guava', version: '24.0-jre'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok'
+
+    testCompile group: 'org.testng', name: 'testng'
+
+}
+
+dependencies {
+    testCompile group: 'io.cucumber', name: 'cucumber-core'
+    testCompile group: 'io.cucumber', name: 'cucumber-java'
+    testCompile group: 'io.cucumber', name: 'cucumber-testng'
+    testCompile group: 'org.testng', name: 'testng'
+    testCompile group: 'org.modelmapper', name: 'modelmapper'
+
+    testCompileOnly group: 'org.projectlombok', name: 'lombok'
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok'
+}
+
+task testAPI(type: Test) {
+    def env = System.getProperty("env")
+    def testSuitesPath = "src/test/resources/testng/test1/testng-api.xml"
+    useTestNG() {
+        suites testSuitesPath
+    }
+    testLogging.showStandardStreams = true
+    jvmArgs '-da'
+    System.setProperty( "basePath", rootProject.projectDir.toString() )
+    systemProperties System.getProperties()
+    ignoreFailures = true
+}
+
+
+group 'com.cot'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'idea'
+apply plugin: 'project-report'
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+    maven { url 'https://projectlombok.org/edge-releases' }
+    maven {
+        url "https://jcenter.bintray.com"
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+idea {
+    module {
+        outputDir file('build/classes/main')
+        testOutputDir file('build/classes/test')
+    }
+}
+
+
+// Configuration for json to schema plugin added to root gradle file
+jsonSchema2Pojo {
+    generateBuilders = true
+    source = files("src/main/resources/json-schemas")
+    targetDirectory = file("${project.buildDir}/generated-sources/js2p")
+    targetPackage = 'com.restful.pojo'
+    annotationStyle = 'jackson'
+    includeHashcodeAndEquals = false
+    includeToString = false
+    sourceType = 'jsonschema' // Schema generated from http://jsonschema.net
+}
+
+// Disable unused tasks
+compileJava { enabled = true }
+compileTestJava { enabled = true }
+processResources { enabled = true }
+processTestResources { enabled = true }
+testClasses { enabled = true }
+test { enabled = true }
+
